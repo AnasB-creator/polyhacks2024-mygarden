@@ -2,6 +2,8 @@
 
 function(input, output, session) {
 
+  # map logic ----
+
   # generate map
   output$map <- leaflet::renderLeaflet({
 
@@ -55,10 +57,13 @@ function(input, output, session) {
   })
 
   # selected city output
-  output$mapCity <- renderText({
+  output$mapCity <- shiny::renderText({
     shiny::validate(shiny::need(mapMarker(), message = "Select a city"))
 
     paste0("Your selected city is: ", mapMarker())
   })
+
+
+
 
 }

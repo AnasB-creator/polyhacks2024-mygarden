@@ -1,33 +1,69 @@
 #---- User interface for the Shiny app ----#
 
-bslib::page_sidebar(
-  title = "My Garden",
+bslib::page_fillable(
   theme = app_theme,
-  sidebar = bslib::sidebar(
-    width = "30%",
-    shiny::h4("Main Options"),
-    shiny::numericInput(
-      inputId = "gardenArea",
-      label = shiny::HTML("Enter your garden's size in m<sup>2</sup>"),
-      value = 2, min = 0, step = 1
+
+  # page layout
+  bslib::layout_columns(
+    col_widths = c(4,8),
+    # app info & inputs ----
+    bslib::card(
+      class = "well border-0",
+
+      ## app info ----
+
+      # title
+      shiny::titlePanel("My Garden"),
+
+      # instructions
+      shiny::p(
+        "First select your city on the map and input your garden size, then select
+        your level of importance for each of the optimization parameters: total annual
+        value of the harvests, the amount of calories produced, the amount of emissions
+        saved and the preferred sowing-to-harvesting time."
+      ),
+
+      ## inputs ----
+
+      # map
+      shiny::textOutput(outputId = "mapCity"),
+      leaflet::leafletOutput("map", height = "25vh"),
+
+      # garden size
+      shiny::numericInput(
+        inputId = "gardenArea",
+        label = "Enter your garden's size in square feet",
+        value = 2, min = 0, step = 1,
+        width = "300px"
+      ),
+
+      # optimization coefficients
+      shiny::h6("How important for you is it to ..."),
+      bslib::layout_columns(
+        col_widths = c(6,6),
+        # fill = FALSE,
+        importanceInput("coeffValue", "maximize value ($)?", importance_levels),
+        importanceInput("coeffCal", "maximize produced calories?", importance_levels)
+      ),
+      bslib::layout_columns(
+        col_widths = c(6,6),
+        # fill = FALSE,
+        importanceInput("coeffCO2", "maximize saved CO2 emissions?", importance_levels),
+        importanceInput("coeffTime", "minimize sowing-to-harvesting time?", importance_levels)
+      ),
+
+      ## run optimization ----
+      shiny::div(
+        shiny::actionButton(
+          "runOpt",
+          label = "Suggest a garden plan"
+        )
+      )
     ),
-    leaflet::leafletOutput("map", height = "25vh"),
-    shiny::textOutput(outputId = "mapCity"),
-    shiny::h4("More Options"),
-    shiny::selectInput(
-      "uniquePlantsMax",
-      label = "How many different plants at max?",
-      choices = c("2"=2, "3"=3, "4"=4, "5"=5, "6+"=Inf),
-      selected = 4
-    ),
-    shiny::selectInput(
-      "maintLevelMax",
-      label = "Max maintenance level?",
-      choices = c("Low" = 1, "Medium" = 2, "High" = 3),
-      selected = 2
-    ),
-    importanceInput("coeffValue", "Value ($):", importance_levels),
-    importanceInput("coeffCal", "Calories:", importance_levels),
-    importanceInput("coeffCO2", "Saved CO2 emissions:", importance_levels)
+
+    # results ----
+    bslib::card(
+      class = NULL
+    )
   )
 )

@@ -1,6 +1,4 @@
-
 # Setup -------------------------------------------------------------------
-
 library(conflicted)          # conflict resolution on package loading
 library(magrittr)            # pipe operator & helpers
 library(dplyr)               # data manipulation
@@ -80,7 +78,8 @@ iconSelected <- leaflet::makeIcon(
 
 ## theme ----
 app_theme <- bslib::bs_theme(
-  "font-size-base" = "0.8rem"
+  "font-size-base" = "0.9rem",
+  "headings-font-weight" = "700"
 )
 
 ## raw data ----
