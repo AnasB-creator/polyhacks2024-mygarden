@@ -1,5 +1,5 @@
 
-def scriptAnalysis(city: str, areaGarden: float, coeffValue: float, coeffCal: float, coeffCO2: float, coeffTime: float):
+def scriptAnalysis(city, areaGarden, coeffValue, coeffCal, coeffCO2, coeffTime):
     """Function that takes into input the user desired values and outputs a gardening plan, The function will be used
     inside R shiny that is why it is so compact"""
     import numpy as np
