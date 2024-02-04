@@ -5,18 +5,33 @@ def scriptAnalysis(city: str, areaGarden: float, coeffValue: float, coeffCal: fl
     import numpy as np
     import pandas as pd
     import pulp as plp
-    from sqlalchemy import create_engine, text
+    import psycopg2
+    # from sqlalchemy import create_engine
     from sklearn.preprocessing import MinMaxScaler
+
+
 
     # Connection to the DataBase
     connStr = f'postgresql://{"roppa070"}:{"xqchfg1d2YIb"}@{"ep-soft-unit-a5tg3j5a.us-east-2.aws.neon.tech"}/{"dev"}?sslmode=require'
-    engine = create_engine(connStr)
+
+    conn = psycopg2.connect(connStr)
 
     # Cities hardiness and latitude, longitude downloaded
-    citiesDf = pd.read_sql_table('cities', con=engine)
+    citiesDf = pd.read_sql('SELECT * FROM cities', con=conn)
 
     # Plants dataset loading into a dataframe
-    plantsDf = pd.read_sql_table('plants', con=engine)
+    plantsDf = pd.read_sql('SELECT * FROM plants', con=conn)
+
+    # Make sure to close the connection once done
+    conn.close()
+
+    # engine = create_engine(connStr)
+    #
+    # # Cities hardiness and latitude, longitude downloaded
+    # citiesDf = pd.read_sql_table('cities', con=engine)
+    #
+    # # Plants dataset loading into a dataframe
+    # plantsDf = pd.read_sql_table('plants', con=engine)
 
     # Initialize the MinMaxScaler
     scaler = MinMaxScaler()
@@ -184,3 +199,6 @@ def scriptAnalysis(city: str, areaGarden: float, coeffValue: float, coeffCal: fl
 
     return plantationsDf
 
+
+if __name__ == '__main__':
+    print(scriptAnalysis("Vancouver", 50, 0.5,0.5,0.2,0.6))
