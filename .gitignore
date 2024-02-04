@@ -47,3 +47,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+
+#env file
+/py/.env
+/py/dataExploration.ipynb
